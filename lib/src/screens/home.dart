@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_4/src/widgets/cat.dart';
+import 'dart:math';
 
 class Home extends StatefulWidget {
   @override
@@ -15,11 +16,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     super.initState();
 
     catController = AnimationController(
-      duration: Duration(seconds: 2),
+      duration: Duration(milliseconds: 200),
       vsync: this,
     );
 
-    catAnimation = Tween(begin: 0.0, end: 100.0).animate(
+    catAnimation = Tween(begin: -35.0, end: -80.0).animate(
       CurvedAnimation(
         parent: catController, 
         curve: Curves.easeIn
@@ -44,10 +45,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       body: GestureDetector(
         child: Center(
           child: Stack(
+            overflow: Overflow.visible,
             children: [
-              buildBox(),
               buildCatAnimation(),
-              
+              buildBox(),
+              buildLeftFlap()
             ],
           ),
         ),
@@ -62,7 +64,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       builder: (context, child) {
         return Positioned(
           child: child,
-          bottom: catAnimation.value,
+          top: catAnimation.value,
+          right: 0.0,
+          left: 0.0,
         );
       },
       child: Cat(),
@@ -76,4 +80,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       color: Colors.brown,
     );
   }
+
+  Widget buildLeftFlap() {
+    return Positioned(
+      left: 3.0,
+      child: Transform.rotate(
+        child: Container(
+          height: 10.0,
+          width: 125.0,
+          color: Colors.brown,
+        ),
+        angle: pi * 0.6,
+        alignment: Alignment.topLeft,
+      ),
+    );
+  } 
 }
